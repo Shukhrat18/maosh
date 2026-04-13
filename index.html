@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Ҳисоби Соатҳо</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#e8f4fd;--bg2:#f4f9fe;--bg3:#dbeeff;--card:#fff;--border:#b3d4f0;
+  --accent:#1a6fc4;--accent2:#0d5ba8;--accent-light:#e3f2fd;
+  --green:#1a8a3c;--green-bg:#e8f5ed;--red:#c0392b;--red-bg:#fdecea;
+  --orange:#c97a00;--orange-bg:#fef3e2;
+  --text:#0f2942;--text2:#2c5282;--muted:#5a7fa8;
+  --shadow:0 2px 8px rgba(26,111,196,.12);--shadow2:0 4px 16px rgba(26,111,196,.2);
+  --r:14px;--rs:8px;
+  --hdr-h:52px;--tabs-h:44px;
+}
+body.dark{
+  --bg:#0d1117;--bg2:#161b22;--bg3:#1c2333;--card:#21262d;--border:#30363d;
+  --accent:#58a6ff;--accent2:#79b8ff;--accent-light:#1c2a3a;
+  --green:#3fb950;--green-bg:#0d2318;--red:#f85149;--red-bg:#2d1214;
+  --orange:#f0883e;--orange-bg:#2d1f0a;
+  --text:#e6edf3;--text2:#8b949e;--muted:#8b949e;
+  --shadow:0 2px 8px rgba(0,0,0,.4);--shadow2:0 4px 16px rgba(0,0,0,.5);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans',sans-serif;min-height:100vh;transition:background .3s,color .3s;}
+
+/* ── STICKY HEADER ── */
+.hdr{
+  position:fixed;top:0;left:0;right:0;z-index:300;
+  height:var(--hdr-h);
+  background:linear-gradient(135deg,var(--accent2),var(--accent));
+  padding:0 12px;display:flex;align-items:center;justify-content:space-between;gap:8px;
+  box-shadow:var(--shadow2);
+}
+body.dark .hdr{background:linear-gradient(135deg,#1c2333,#21262d);border-bottom:1px solid var(--border);}
+.hdr-title{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:#fff;letter-spacing:.5px;white-space:nowrap;}
+.hdr-right{display:flex;align-items:center;gap:5px;flex-shrink:0;}
+
+/* ── МЕНЮИ ЗАБОН (dropdown) ── */
+.lang-dropdown{position:relative;display:inline-block;}
+.lang-btn{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);color:#fff;padding:4px 10px;border-radius:6px;font-size:12px;cursor:pointer;font-family:'Rajdhani',sans-serif;font-weight:700;display:flex;align-items:center;gap:4px;}
+body.dark .lang-btn{background:var(--bg3);border-color:var(--border);color:var(--text);}
+.lang-menu{position:absolute;top:38px;right:0;background:var(--card);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow2);z-index:400;min-width:120px;display:none;overflow:hidden;}
+.lang-menu button{width:100%;padding:10px 14px;border:none;background:none;color:var(--text);font-size:13px;cursor:pointer;text-align:left;font-family:'Noto Sans',sans-serif;transition:background .2s;}
+.lang-menu button:hover{background:var(--accent-light);color:var(--accent);}
+.lang-dropdown.open .lang-menu{display:block;}
+
+/* ── ТУГМАИ БАРОМАД ── */
+.logout-btn{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);color:#fff;padding:4px 10px;border-radius:6px;font-size:12px;cursor:pointer;font-family:'Rajdhani',sans-serif;font-weight:700;display:flex;align-items:center;gap:4px;}
+body.dark .logout-btn{background:var(--bg3);border-color:var(--border);color:var(--text);}
+.logout-btn:hover{background:rgba(255,255,255,.3);}
+
+.tbtn{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);color:#fff;width:34px;height:34px;border-radius:7px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+body.dark .tbtn{background:var(--bg3);border-color:var(--border);color:var(--text);}
+
+/* ── STICKY TABS ── */
+.tabs{
+  position:fixed;top:var(--hdr-h);left:0;right:0;z-index:200;
+  height:var(--tabs-h);
+  display:flex;background:var(--card);border-bottom:2px solid var(--border);
+  overflow-x:auto;scrollbar-width:none;
+  box-shadow:0 2px 6px rgba(26,111,196,.08);
+}
+.tabs::-webkit-scrollbar{display:none;}
+.tabx{
+  flex:1;min-width:72px;height:100%;padding:0 6px;
+  background:none;border:none;color:var(--muted);font-size:12px;
+  font-family:'Noto Sans',sans-serif;cursor:pointer;
+  border-bottom:3px solid transparent;
+  transition:all .2s;white-space:nowrap;text-align:center;font-weight:500;
+}
+.tabx.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600;}
+
+/* ── CONTENT offset ── */
+.main{
+  padding:13px;max-width:620px;margin:0 auto;
+  padding-top:calc(var(--hdr-h) + var(--tabs-h) + 13px);
+}
+.pg{display:none;}.pg.active{display:block;}
+
+/* ── CARD ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:15px;margin-bottom:11px;box-shadow:var(--shadow);}
+.ctitle{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:var(--accent);margin-bottom:13px;letter-spacing:.5px;text-transform:uppercase;display:flex;align-items:center;gap:5px;}
+
+/* ── FORM ── */
+label{font-size:12px;color:var(--muted);display:block;margin-bottom:4px;margin-top:11px;font-weight:500;}
+label:first-of-type{margin-top:0;}
+input,select{width:100%;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--rs);color:var(--text);padding:9px 11px;font-size:14px;font-family:'Noto Sans',sans-serif;outline:none;transition:border-color .2s;}
+input:focus,select:focus{border-color:var(--accent);background:var(--card);}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+
+/* ── BUTTONS ── */
+.btn{width:100%;padding:11px;border:none;border-radius:var(--rs);font-size:15px;font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:.4px;cursor:pointer;transition:all .2s;margin-top:10px;}
+.bp{background:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(26,111,196,.3);}
+.bp:hover{background:var(--accent2);transform:translateY(-1px);}
+.bs{background:var(--accent-light);color:var(--accent);border:1.5px solid var(--border);}
+.bs:hover{border-color:var(--accent);}
+.bd{background:var(--red-bg);color:var(--red);border:1.5px solid rgba(192,57,43,.2);}
+.bd:hover{background:var(--red);color:#fff;}
+
+/* ── RESULT ── */
+.rbox{background:var(--green-bg);border:1.5px solid var(--green);border-radius:11px;padding:13px;margin-top:11px;text-align:center;}
+.rbox .bnum{font-family:'Rajdhani',sans-serif;font-size:46px;font-weight:700;color:var(--green);line-height:1;}
+.rbox .rlbl{font-size:12px;color:var(--muted);margin-top:3px;}
+.convv{background:var(--accent-light);border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-size:12px;color:var(--accent);margin-top:5px;font-family:'Rajdhani',sans-serif;font-weight:700;display:none;}
+
+/* ── SALARY TABLE ── */
+.stbl{background:var(--bg2);border-radius:var(--rs);overflow:hidden;border:1px solid var(--border);margin-top:9px;}
+.sr{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid var(--border);font-size:12.5px;gap:6px;}
+.sr:last-child{border-bottom:none;}
+.sr .sl{color:var(--muted);flex:1;line-height:1.3;}
+.sr .sv{font-weight:700;font-family:'Rajdhani',sans-serif;font-size:14px;flex-shrink:0;}
+.sr.tot{background:linear-gradient(135deg,var(--accent-light),var(--bg2));}
+.sr.tot .sv{color:var(--accent);font-size:17px;}
+.sr.fin{background:linear-gradient(135deg,var(--green-bg),var(--bg2));}
+.sr.fin .sv{color:var(--green);font-size:19px;}
+
+/* ── SUMMARY BAR ── */
+.sbar{background:linear-gradient(135deg,var(--accent2),var(--accent));border-radius:var(--r);padding:13px 15px;margin-bottom:11px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;text-align:center;box-shadow:var(--shadow2);}
+body.dark .sbar{background:linear-gradient(135deg,#1c2a3a,#1a2332);border:1px solid var(--border);}
+.sbar .sbv{font-family:'Rajdhani',sans-serif;font-size:21px;font-weight:700;color:#fff;}
+.sbar .sbl{font-size:10px;color:rgba(255,255,255,.75);margin-top:1px;}
+
+/* ── WEEK ACCORDION (тартиб аз НАВТАРИН БОЛО) ── */
+.wacc{border-radius:var(--r);overflow:hidden;border:1.5px solid var(--border);margin-bottom:10px;box-shadow:var(--shadow);}
+.whdr{padding:12px 15px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;user-select:none;transition:filter .15s;background:linear-gradient(135deg,var(--accent2) 0%,var(--accent) 100%);}
+body.dark .whdr{background:linear-gradient(135deg,#1c2a3a,#1a2332);border-bottom:1px solid var(--border);}
+.whdr:hover{filter:brightness(1.07);}
+.whl{display:flex;flex-direction:column;gap:2px;}
+.wnum{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:#fff;letter-spacing:.4px;}
+.wdates{font-size:11px;color:rgba(255,255,255,.8);}
+.whr{display:flex;align-items:center;gap:7px;}
+.wbh{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.35);border-radius:20px;padding:3px 10px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#fff;}
+.wbm{background:rgba(255,255,255,.95);border-radius:20px;padding:3px 10px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:var(--accent2);}
+.warr{color:rgba(255,255,255,.9);font-size:13px;transition:transform .3s;flex-shrink:0;}
+.wacc.open .warr{transform:rotate(180deg);}
+.wbody{display:none;}
+.wacc.open .wbody{display:block;background:var(--card);}
+.wbinner{padding:13px;}
+
+/* ── DAY ROW ── */
+.drow{display:flex;align-items:center;gap:5px;padding:8px 0;border-bottom:1px solid var(--border);}
+.drow:last-of-type{border-bottom:none;}
+.dname{font-weight:600;font-size:13px;min-width:42px;}
+.ddate{font-size:11px;color:var(--muted);min-width:76px;}
+.dtimes{font-size:11px;color:var(--muted);flex:1;}
+.dhours{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:var(--green);min-width:48px;text-align:right;}
+.ddel{background:none;border:1px solid var(--border);color:var(--red);padding:3px 7px;border-radius:5px;font-size:11px;cursor:pointer;flex-shrink:0;}
+.badge{display:inline-block;padding:1px 6px;border-radius:20px;font-size:10px;font-family:'Rajdhani',sans-serif;font-weight:700;}
+.bg{background:var(--green-bg);color:var(--green);border:1px solid rgba(26,138,60,.2);}
+.bo{background:var(--orange-bg);color:var(--orange);border:1px solid rgba(201,122,0,.2);}
+.bm{background:var(--bg3);color:var(--muted);}
+
+/* ── DEDUCT ── */
+.wded{background:var(--red-bg);border:1px solid rgba(192,57,43,.18);border-radius:var(--rs);padding:10px;margin-top:10px;}
+.wdedtitle{font-size:11px;font-weight:700;color:var(--red);margin-bottom:7px;text-transform:uppercase;letter-spacing:.4px;}
+.ditem{display:flex;align-items:center;gap:5px;margin-bottom:6px;}
+.ditem input[type="text"]{flex:1.3;font-size:12px;padding:6px 9px;}
+.ditem input[type="number"]{flex:0.9;font-size:12px;padding:6px 9px;}
+.ddelbtn{background:none;border:1px solid rgba(192,57,43,.3);color:var(--red);padding:6px 9px;border-radius:5px;font-size:12px;cursor:pointer;flex-shrink:0;}
+.addbtn{width:100%;padding:7px;background:rgba(192,57,43,.06);border:1px dashed rgba(192,57,43,.3);border-radius:6px;color:var(--red);font-size:12px;cursor:pointer;font-family:'Rajdhani',sans-serif;font-weight:700;transition:all .2s;margin-top:3px;}
+.addbtn:hover{background:rgba(192,57,43,.13);}
+
+/* ── MISC ── */
+.import-label{display:block;width:100%;padding:10px;background:var(--accent-light);border:1.5px dashed var(--accent);border-radius:var(--rs);color:var(--accent);font-size:13px;font-family:'Rajdhani',sans-serif;font-weight:700;text-align:center;cursor:pointer;transition:all .2s;letter-spacing:.3px;}
+.import-label:hover{background:var(--accent);color:#fff;}
+.inote{background:var(--bg2);border-radius:var(--rs);padding:9px 11px;font-size:12px;color:var(--text2);margin-bottom:11px;line-height:1.6;}
+.savind{font-size:12px;color:var(--green);text-align:center;margin-top:7px;opacity:0;transition:opacity .3s;}
+.savind.show{opacity:1;}
+.empty{text-align:center;padding:22px 16px;color:var(--muted);font-size:13px;}
+.empty .emo{font-size:28px;margin-bottom:6px;}
+.wk-sel-btn{width:100%;padding:9px 13px;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--rs);color:var(--text);font-size:13px;cursor:pointer;font-family:'Noto Sans',sans-serif;text-align:left;transition:all .2s;display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+.wk-sel-btn:hover{border-color:var(--accent);background:var(--accent-light);}
+.wk-sel-btn .wkh{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:var(--accent);}
+
+@media(max-width:380px){
+  .r2{grid-template-columns:1fr;}
+  .hdr-title{font-size:16px;}
+  .wbm{display:none;}
+}
+
+/* ══════════ PIN LOCK ══════════ */
+.pin-bg{
+  position:fixed;inset:0;z-index:9999;
+  background:#f5f7fa;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Noto Sans',sans-serif;
+}
+body.dark .pin-bg{background:#0d1117;}
+.pin-box{
+  width:100%;max-width:380px;padding:0 24px 32px;
+  display:flex;flex-direction:column;align-items:center;
+}
+.pin-icon-wrap{
+  width:80px;height:80px;border-radius:50%;
+  background:linear-gradient(135deg,#e3f2fd,#bbdefb);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:22px;margin-top:40px;
+  box-shadow:0 4px 16px rgba(26,111,196,.18);
+}
+body.dark .pin-icon-wrap{background:linear-gradient(135deg,#1c2a3a,#1a2332);}
+.pin-icon{font-size:34px;line-height:1;}
+.pin-title{font-size:26px;font-weight:700;color:#1a1a2e;text-align:center;margin-bottom:6px;letter-spacing:-.3px;}
+body.dark .pin-title{color:#e6edf3;}
+.pin-sub{font-size:14px;color:#8b949e;text-align:center;margin-bottom:28px;}
+.pin-dots{display:flex;gap:16px;margin-bottom:8px;}
+.pdot{
+  width:18px;height:18px;border-radius:50%;
+  border:2.5px solid #b3d4f0;background:transparent;
+  transition:all .2s;
+}
+body.dark .pdot{border-color:#30363d;}
+.pdot.filled{background:#1a6fc4;border-color:#1a6fc4;transform:scale(1.1);}
+.pdot.error{background:#c0392b;border-color:#c0392b;animation:shake .4s ease;}
+body.dark .pdot.filled{background:#58a6ff;border-color:#58a6ff;}
+@keyframes shake{0%,100%{transform:translateX(0);}20%{transform:translateX(-6px);}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(4px);}}
+.pin-error{
+  height:20px;font-size:13px;color:#c0392b;text-align:center;
+  margin-bottom:16px;font-weight:500;
+}
+body.dark .pin-error{color:#f85149;}
+.pin-pad{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:12px;width:100%;max-width:300px;
+}
+.pkey{
+  background:#fff;border:none;border-radius:16px;
+  height:72px;font-size:28px;font-weight:600;color:#1a1a2e;
+  cursor:pointer;transition:all .15s;
+  box-shadow:0 2px 8px rgba(0,0,0,.08),0 0 0 1px rgba(0,0,0,.04);
+  font-family:'Rajdhani',sans-serif;
+  display:flex;align-items:center;justify-content:center;
+}
+body.dark .pkey{background:#21262d;color:#e6edf3;box-shadow:0 2px 8px rgba(0,0,0,.4);}
+.pkey:active{transform:scale(.93);background:#e3f2fd;box-shadow:0 1px 3px rgba(0,0,0,.08);}
+body.dark .pkey:active{background:#1c2a3a;}
+.pkey-fp{font-size:26px;color:#1a6fc4;}
+body.dark .pkey-fp{color:#58a6ff;}
+.pkey-del{font-size:22px;color:#8b949e;}
+.pin-footer{margin-top:28px;}
+.pin-logout-btn{
+  background:none;border:none;color:#8b949e;font-size:14px;
+  cursor:pointer;display:flex;align-items:center;gap:6px;
+  font-family:'Noto Sans',sans-serif;padding:6px 12px;border-radius:8px;
+  transition:color .2s;
+}
+.pin-logout-btn:hover{color:#c0392b;}
+
+/* PIN setup in settings */
+.pin-setup-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);}
+.pin-setup-row:last-child{border-bottom:none;}
+.toggle-switch{position:relative;width:44px;height:24px;flex-shrink:0;}
+.toggle-switch input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;inset:0;background:#ccc;border-radius:24px;cursor:pointer;transition:.3s;}
+.toggle-slider:before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.3s;}
+.toggle-switch input:checked+.toggle-slider{background:var(--accent);}
+.toggle-switch input:checked+.toggle-slider:before{transform:translateX(20px);}
+</style>
+</head>
+<body>
+
+<!-- PIN LOCK SCREEN -->
+<div id="pinScreen" style="display:none">
+  <div class="pin-bg">
+    <div class="pin-box">
+      <div class="pin-icon-wrap"><div class="pin-icon">🔒</div></div>
+      <div class="pin-title" id="pinTitle">Ворид кунед PIN</div>
+      <div class="pin-sub" id="pinSub">4 рақамаи PIN-код</div>
+      <div class="pin-dots">
+        <div class="pdot" id="pd0"></div>
+        <div class="pdot" id="pd1"></div>
+        <div class="pdot" id="pd2"></div>
+        <div class="pdot" id="pd3"></div>
+      </div>
+      <div class="pin-error" id="pinError"></div>
+      <div class="pin-pad">
+        <button class="pkey" onclick="pinPress('1')">1</button>
+        <button class="pkey" onclick="pinPress('2')">2</button>
+        <button class="pkey" onclick="pinPress('3')">3</button>
+        <button class="pkey" onclick="pinPress('4')">4</button>
+        <button class="pkey" onclick="pinPress('5')">5</button>
+        <button class="pkey" onclick="pinPress('6')">6</button>
+        <button class="pkey" onclick="pinPress('7')">7</button>
+        <button class="pkey" onclick="pinPress('8')">8</button>
+        <button class="pkey" onclick="pinPress('9')">9</button>
+        <button class="pkey pkey-fp" id="fpBtn" onclick="tryFingerprint()" style="display:none">☝️</button>
+        <button class="pkey" onclick="pinPress('0')">0</button>
+        <button class="pkey pkey-del" onclick="pinDel()">⌫</button>
+      </div>
+      <div class="pin-footer">
+        <button class="pin-logout-btn" onclick="pinLogout()">↪ <span id="pinLogoutTxt">Чиқиш</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STICKY HEADER -->
+<div class="hdr">
+  <div class="hdr-title">⏱ <span id="appTitle">Ҳисоби Соатҳо</span></div>
+  <div class="hdr-right">
+    <!-- МЕНЮИ ЗАБОН (як тугмача) -->
+    <div class="lang-dropdown" id="langDropdown">
+      <button class="lang-btn" onclick="toggleLangMenu()" id="langBtn">🌐 ТҶ</button>
+      <div class="lang-menu">
+        <button onclick="setLang('tg')">🇹🇯 Тоҷикӣ</button>
+        <button onclick="setLang('ru')">🇷🇺 Русӣ</button>
+        <button onclick="setLang('en')">🇬🇧 English</button>
+      </div>
+    </div>
+    <!-- ТУГМАИ БАРОМАД -->
+    <button class="logout-btn" onclick="userLogout()">🚪 <span data-k="logoutBtn">Баромад</span></button>
+    <button class="tbtn" onclick="toggleTheme()" id="themeBtn">☀️</button>
+  </div>
+</div>
+
+<!-- STICKY TABS -->
+<div class="tabs">
+  <button class="tabx active" onclick="showPg('calc')" id="tab-calc">🕐 Ҳисоб</button>
+  <button class="tabx" onclick="showPg('weeks')" id="tab-weeks">📅 Ҳафтаҳо</button>
+  <button class="tabx" onclick="showPg('salary')" id="tab-salary">💰 Маош</button>
+  <button class="tabx" onclick="showPg('settings')" id="tab-settings">⚙️ Танзимот</button>
+</div>
+
+<!-- CONTENT -->
+<div class="main">
+
+<!-- CALC -->
+<div class="pg active" id="pg-calc">
+  <div class="card">
+    <div class="ctitle">📅 <span data-k="cardToday">Имрӯзи корӣ</span></div>
+    <label data-k="lblDate">Санаи кор</label>
+    <input type="date" id="workDate">
+    <div id="weekHint" style="font-size:11px;color:var(--accent);margin-top:5px;background:var(--accent-light);border-radius:6px;padding:5px 9px;display:none"></div>
+    <div class="r2" style="margin-top:10px">
+      <div><label data-k="lblStart">Оғози кор</label><input type="time" id="startTime" value="08:00"></div>
+      <div><label data-k="lblEnd">Анҷоми кор</label><input type="time" id="endTime" value="17:00"></div>
+    </div>
+    <label data-k="lblBreak">Танаффус (дақиқа)</label>
+    <input type="number" id="breakMin" value="60" min="0" max="480">
+    <button class="btn bp" onclick="calcDay()" data-k="btnCalc">▶ ҲИСОБ КУНЕД</button>
+  </div>
+  <div id="dayResult" style="display:none">
+    <div class="rbox">
+      <div class="bnum" id="dayHours">0.00</div>
+      <div class="rlbl" data-k="hoursWorked">соат кор карда шуд</div>
+    </div>
+    <div class="stbl" id="daySalBox"></div>
+    <button class="btn bs" onclick="addToWeek()" data-k="btnAdd" style="margin-top:9px">➕ Ба ҳафта илова кунед</button>
+  </div>
+</div>
+
+<!-- WEEKS -->
+<div class="pg" id="pg-weeks">
+  <div class="sbar">
+    <div><div class="sbv" id="sbH">0</div><div class="sbl" data-k="sbH">Ҷамъи соат</div></div>
+    <div><div class="sbv" id="sbD">0</div><div class="sbl" data-k="sbD">Рӯзи корӣ</div></div>
+    <div><div class="sbv" id="sbM">—</div><div class="sbl" data-k="sbM">Маблағ</div></div>
+  </div>
+  <div id="weeksContainer"></div>
+  <button class="btn bd" onclick="clearAll()" data-k="btnClearAll" style="margin-top:4px">🗑 Ҳамаро тоза кунед</button>
+</div>
+
+<!-- SALARY -->
+<div class="pg" id="pg-salary">
+  <div class="card">
+    <div class="ctitle">💰 <span data-k="cardSal">Ҳисоби маош</span></div>
+    <div class="inote" data-k="salNote">💡 8.30 ворид кунед → барнома 8.50 ҳисоб мекунад (30 дақ = 0.50 соат)</div>
+    <label data-k="lblSrc">Аз кадом ҳафта гиред?</label>
+    <div id="wkSelBox"></div>
+    <label data-k="lblManH">ё дастӣ ворид кунед (соат.дақиқа)</label>
+    <input type="number" id="manHours" value="0" min="0" step="0.01" oninput="showHint()">
+    <div class="convv" id="convHint"></div>
+    <div style="background:var(--red-bg);border:1px solid rgba(192,57,43,.2);border-radius:8px;padding:10px;margin-top:11px">
+      <div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:7px;text-transform:uppercase">➖ <span data-k="deductTitle">Минус</span></div>
+      <div id="salDeductList"></div>
+      <button class="addbtn" onclick="addSalDed()" data-k="btnAddDed">＋ Минус илова кунед</button>
+    </div>
+    <button class="btn bp" onclick="calcSalary()" data-k="btnCalcSal" style="margin-top:12px">💰 ҲИСОБ КУНЕД</button>
+  </div>
+  <div id="salResult" style="display:none">
+    <div class="card">
+      <div class="ctitle">📊 <span data-k="cardSalResult">Натиҷаи ҳисоб</span></div>
+      <div class="stbl" id="salBreak"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div class="pg" id="pg-settings">
+  <div class="inote" data-k="setNote">⚙️ Ин танзимот дар хотираи телефон захира мешавад.</div>
+  <div class="card">
+    <div class="ctitle">🕐 <span data-k="cardWork">Танзимоти кор</span></div>
+    <div class="r2">
+      <div><label data-k="lblDefStart">Оғози кор</label><input type="time" id="defStart" value="08:00"></div>
+      <div><label data-k="lblDefEnd">Анҷоми кор</label><input type="time" id="defEnd" value="17:00"></div>
+    </div>
+    <label data-k="lblDefBreak">Танаффус (дақ.)</label>
+    <input type="number" id="defBreak" value="60" min="0">
+    <label data-k="lblOTFrom">Овертайм аз (соат/ҳафта)</label>
+    <input type="number" id="otFrom" value="48" min="1" step="0.5">
+  </div>
+  <div class="card">
+    <div class="ctitle">💵 <span data-k="cardRate">Нархи соат</span></div>
+    <div class="r2">
+      <div><label data-k="lblNorm">Нархи одӣ</label><input type="number" id="normRate" value="5.00" min="0" step="0.01"></div>
+      <div><label data-k="lblOT">Нархи овертайм</label><input type="number" id="otRate" value="7.50" min="0" step="0.01"></div>
+    </div>
+    <label data-k="lblCur">Асъор</label>
+    <select id="currency">
+      <option value="TJS">TJS — Сомонӣ</option>
+      <option value="RUB">RUB — Рубл ₽</option>
+      <option value="USD">USD — Доллар $</option>
+      <option value="EUR">EUR — Евро €</option>
+      <option value="GBP">GBP — Фунт £</option>
+      <option value="KZT">KZT — Тенге ₸</option>
+    </select>
+  </div>
+  <div class="card">
+    <div class="ctitle">🧾 <span data-k="cardTax">Андоз ва суғурта</span></div>
+    <div class="r2">
+      <div><label data-k="lblTax">Андоз (%)</label><input type="number" id="taxPct" value="20" min="0" max="100"></div>
+      <div><label data-k="lblIns">Суғурта (%)</label><input type="number" id="insPct" value="8" min="0" max="100"></div>
+    </div>
+    <label data-k="lblMin">Кӯрсина пеш аз андоз</label>
+    <input type="number" id="minDed" value="241.73" min="0" step="0.01">
+  </div>
+  <button class="btn bp" onclick="saveSettings()" data-k="btnSave">💾 ЗАХИРА КУНЕД</button>
+  <div class="savind" id="savInd" data-k="savedMsg">✓ Захира шуд!</div>
+
+  <!-- PIN SETTINGS -->
+  <div class="card" style="margin-top:4px">
+    <div class="ctitle">🔒 <span data-k="cardPin">Ҳифзи PIN-код</span></div>
+    <div class="pin-setup-row">
+      <div>
+        <div style="font-size:14px;font-weight:600" data-k="pinEnable">PIN-код фаъол кунед</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px" data-k="pinEnableSub">Барои дохил шудан PIN пурсад</div>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" id="pinEnabled" onchange="onPinToggle()">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+    <div id="pinSetupArea" style="display:none">
+      <div class="pin-setup-row">
+        <div style="font-size:13px;color:var(--muted)" data-k="pinCurrentLabel">Ҷорӣ PIN</div>
+        <div style="font-size:14px;font-weight:700;color:var(--accent)" id="pinStatusText">—</div>
+      </div>
+      <button class="btn bs" onclick="openPinSetup()" data-k="btnSetPin" style="margin-top:8px">🔑 PIN-код муқаррар кунед</button>
+      <div class="pin-setup-row" style="margin-top:8px">
+        <div>
+          <div style="font-size:14px;font-weight:600" data-k="fpEnable">Изи ангушт</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px" data-k="fpEnableSub">Агар дастгоҳ дастгирӣ кунад</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="fpEnabled" onchange="savePinSett()">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:4px">
+    <div class="ctitle">📤 <span data-k="cardExport">Экспорт ва Импорт</span></div>
+    <div class="inote" data-k="exportNote">📱 Барои гузаштан ба телефони нав: аввал JSON-ро захира кунед, баъд дар телефони нав импорт кунед.</div>
+    <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;margin-top:4px" data-k="exportSection">📤 Экспорт</div>
+    <div class="r2">
+      <button class="btn bs" onclick="exportJSON()" style="margin-top:0;padding:10px 6px;font-size:13px">
+        📄 JSON<br><span style="font-size:10px;opacity:.8" data-k="exportJsonSub">Тамоми маълумот</span>
+      </button>
+      <button class="btn bs" onclick="exportExcel()" style="margin-top:0;padding:10px 6px;font-size:13px;border-color:var(--green);color:var(--green)">
+        📊 Excel<br><span style="font-size:10px;opacity:.8" data-k="exportXlsSub">Соатҳои корӣ</span>
+      </button>
+    </div>
+    <div style="font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;margin-top:14px" data-k="importSection">📥 Импорт (JSON)</div>
+    <label for="importFile" class="import-label" id="importLabel" data-k="importBtn">
+      📂 Файлро интихоб кунед
+    </label>
+    <input type="file" id="importFile" accept=".json" onchange="importJSON(event)" style="display:none">
+    <div id="importStatus" style="font-size:12px;margin-top:7px;display:none;padding:7px 10px;border-radius:6px;"></div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+/* ===== TRANSLATIONS ===== */
+const TR={
+tg:{
+  appTitle:"Ҳисоби Соатҳо",tabCalc:"🕐 Ҳисоб",tabWeeks:"📅 Ҳафтаҳо",tabSalary:"💰 Маош",tabSettings:"⚙️ Танзимот",
+  cardToday:"Имрӯзи корӣ",lblDate:"Санаи кор",lblStart:"Оғози кор",lblEnd:"Анҷоми кор",
+  lblBreak:"Танаффус (дақиқа)",btnCalc:"▶ ҲИСОБ КУНЕД",hoursWorked:"соат кор карда шуд",
+  btnAdd:"➕ Ба ҳафта илова кунед",sbH:"Ҷамъи соат",sbD:"Рӯзи корӣ",sbM:"Маблағ",
+  cardSal:"Ҳисоби маош",salNote:"💡 8.30 ворид кунед → барнома 8.50 ҳисоб мекунад (30 дақ = 0.50 соат)",
+  lblSrc:"Аз кадом ҳафта гиред?",lblManH:"ё дастӣ ворид кунед (соат.дақиқа)",
+  deductTitle:"Минус",btnAddDed:"＋ Минус илова кунед",btnCalcSal:"💰 ҲИСОБ КУНЕД",
+  cardSalResult:"Натиҷаи ҳисоб",setNote:"⚙️ Ин танзимот дар хотираи телефон захира мешавад.",
+  cardWork:"Танзимоти кор",lblDefStart:"Оғози кор",lblDefEnd:"Анҷоми кор",
+  lblDefBreak:"Танаффус (дақ.)",lblOTFrom:"Овертайм аз (соат/ҳафта)",
+  cardRate:"Нархи соат",lblNorm:"Нархи одӣ",lblOT:"Нархи овертайм",lblCur:"Асъор",
+  cardTax:"Андоз ва суғурта",lblTax:"Андоз (%)",lblIns:"Суғурта (%)",
+  lblMin:"Кӯрсина пеш аз андоз",btnSave:"💾 ЗАХИРА КУНЕД",savedMsg:"✓ Захира шуд!",
+  btnClearAll:"🗑 Ҳамаро тоза кунед",
+  normH:"Соати одӣ",otH:"Овертайм",gross:"Маоши умумӣ",ded:"Кӯрсина",taxBase:"Асоси андоз",
+  taxA:"Андоз",insA:"Суғурта",netS:"Маоши холис",totDed:"Ҷамъи минус",finalN:"Маоши ниҳоӣ",
+  convTo:"→ дар соат:",dedPh:"Сабаб (ихтиёрӣ)",
+  wkLabel:"Ҳафта",wkDedTitle:"➖ Минуси ин ҳафта",wkDedBtn:"＋ Минус",
+  days:["Якш","Душ","Сеш","Чорш","Панҷш","Ҷум","Шанб"],
+  hS:"соат",confirmClear:"Ҳамаи маълумотро тоза кунам?",confirmWkClear:"Ин ҳафтаро тоза кунам?",
+  wkHint:"📅 Ин рӯз ба Ҳафта",noData:"Маълумот нест",wkClearBtn:"🗑 Ин ҳафтаро тоза кунед",
+  cardExport:"Экспорт ва Импорт",
+  exportNote:"📱 Барои гузаштан ба телефони нав: аввал JSON-ро захира кунед, баъд дар телефони нав импорт кунед.",
+  exportSection:"📤 Экспорт",exportJsonSub:"Тамоми маълумот",exportXlsSub:"Соатҳои корӣ",
+  importSection:"📥 Импорт (JSON)",importBtn:"📂 Файлро интихоб кунед",
+  importOk:"✓ Маълумот бомуваффақият импорт шуд!",importErr:"✗ Хато! Файлро санҷед.",
+  confirmImport:"Маълумоти мавҷуда иваз мешавад. Давом медиҳем?",
+  cardPin:"Ҳифзи PIN-код",pinEnable:"PIN-код фаъол кунед",pinEnableSub:"Барои дохил шудан PIN пурсад",
+  pinCurrentLabel:"Ҷорӣ PIN",btnSetPin:"🔑 PIN-код муқаррар кунед",
+  fpEnable:"Изи ангушт",fpEnableSub:"Агар дастгоҳ дастгирӣ кунад",
+  pinTitle:"Ворид кунед PIN",pinSub:"4 рақамаи PIN-код",
+  pinNewTitle:"Нав PIN муқаррар кунед",pinNewSub:"4 рақами PIN-код ворид кунед",
+  pinConfTitle:"PIN-ро тасдиқ кунед",pinConfSub:"Боз як маротиба ворид кунед",
+  pinWrong:"PIN хато аст! Боз кӯшиш кунед.",pinMismatch:"PIN мувофиқ нест! Аз нав кӯшиш кунед.",
+  pinSet:"✓ PIN муқаррар шуд",pinLogout:"Чиқиш",logoutBtn:"Баромад"
+},
+ru:{
+  appTitle:"Учёт Часов",tabCalc:"🕐 Расчёт",tabWeeks:"📅 Недели",tabSalary:"💰 Зарплата",tabSettings:"⚙️ Настройки",
+  cardToday:"Рабочий день",lblDate:"Дата",lblStart:"Начало",lblEnd:"Конец",
+  lblBreak:"Перерыв (мин)",btnCalc:"▶ РАССЧИТАТЬ",hoursWorked:"часов отработано",
+  btnAdd:"➕ Добавить в неделю",sbH:"Всего часов",sbD:"Рабочих дней",sbM:"Сумма",
+  cardSal:"Расчёт зарплаты",salNote:"💡 Введите 8.30 → программа считает как 8.50 ч",
+  lblSrc:"Загрузить из недели",lblManH:"или введите вручную (чч.мм)",
+  deductTitle:"Вычеты",btnAddDed:"＋ Добавить вычет",btnCalcSal:"💰 РАССЧИТАТЬ",
+  cardSalResult:"Результат",setNote:"⚙️ Настройки сохраняются в памяти телефона.",
+  cardWork:"Настройки работы",lblDefStart:"Начало работы",lblDefEnd:"Конец работы",
+  lblDefBreak:"Перерыв (мин)",lblOTFrom:"Овертайм с (часов/нед)",
+  cardRate:"Ставки за час",lblNorm:"Обычная ставка",lblOT:"Ставка овертайм",lblCur:"Валюта",
+  cardTax:"Налог и страховка",lblTax:"Налог (%)",lblIns:"Страховка (%)",
+  lblMin:"Необлагаемый минимум",btnSave:"💾 СОХРАНИТЬ",savedMsg:"✓ Сохранено!",
+  btnClearAll:"🗑 Очистить всё",
+  normH:"Обычные часы",otH:"Сверхурочные",gross:"Валовая",ded:"Вычет",taxBase:"Налог. база",
+  taxA:"Налог",insA:"Страховка",netS:"Чистая",totDed:"Всего вычетов",finalN:"Итоговая",
+  convTo:"→ в часах:",dedPh:"Причина (необязательно)",
+  wkLabel:"Неделя",wkDedTitle:"➖ Вычеты недели",wkDedBtn:"＋ Вычет",
+  days:["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
+  hS:"ч",confirmClear:"Очистить все данные?",confirmWkClear:"Очистить данные недели?",
+  wkHint:"📅 Этот день → Неделя",noData:"Нет данных",wkClearBtn:"🗑 Очистить неделю",
+  cardExport:"Экспорт и Импорт",
+  exportNote:"📱 Для переноса на новый телефон: сначала сохраните JSON, затем импортируйте на новом устройстве.",
+  exportSection:"📤 Экспорт",exportJsonSub:"Все данные",exportXlsSub:"Рабочие часы",
+  importSection:"📥 Импорт (JSON)",importBtn:"📂 Выбрать файл",
+  importOk:"✓ Данные успешно импортированы!",importErr:"✗ Ошибка! Проверьте файл.",
+  confirmImport:"Существующие данные будут заменены. Продолжить?",
+  cardPin:"Защита PIN-кодом",pinEnable:"Включить PIN-код",pinEnableSub:"Запрашивать PIN при входе",
+  pinCurrentLabel:"Текущий PIN",btnSetPin:"🔑 Установить PIN-код",
+  fpEnable:"Отпечаток пальца",fpEnableSub:"Если устройство поддерживает",
+  pinTitle:"Введите PIN-код",pinSub:"Используйте 4-значный код",
+  pinNewTitle:"Установите новый PIN",pinNewSub:"Введите 4 цифры PIN-кода",
+  pinConfTitle:"Подтвердите PIN",pinConfSub:"Введите ещё раз",
+  pinWrong:"Неверный PIN! Попробуйте снова.",pinMismatch:"PIN не совпадает! Попробуйте снова.",
+  pinSet:"✓ PIN установлен",pinLogout:"Выйти из аккаунта",logoutBtn:"Выйти"
+},
+en:{
+  appTitle:"Time Tracker",tabCalc:"🕐 Log",tabWeeks:"📅 Weeks",tabSalary:"💰 Salary",tabSettings:"⚙️ Settings",
+  cardToday:"Work Day",lblDate:"Date",lblStart:"Start",lblEnd:"End",
+  lblBreak:"Break (min)",btnCalc:"▶ CALCULATE",hoursWorked:"hours worked",
+  btnAdd:"➕ Add to Week",sbH:"Total Hours",sbD:"Work Days",sbM:"Earnings",
+  cardSal:"Salary Calculator",salNote:"💡 Enter 8.30 → app converts to 8.50 hrs automatically",
+  lblSrc:"Load from week",lblManH:"or enter manually (HH.MM)",
+  deductTitle:"Deductions",btnAddDed:"＋ Add deduction",btnCalcSal:"💰 CALCULATE",
+  cardSalResult:"Result",setNote:"⚙️ Settings are saved to device storage.",
+  cardWork:"Work Settings",lblDefStart:"Start Time",lblDefEnd:"End Time",
+  lblDefBreak:"Break (min)",lblOTFrom:"Overtime after (hrs/wk)",
+  cardRate:"Hourly Rates",lblNorm:"Regular Rate",lblOT:"Overtime Rate",lblCur:"Currency",
+  cardTax:"Tax & Insurance",lblTax:"Tax (%)",lblIns:"Insurance (%)",
+  lblMin:"Non-taxable minimum",btnSave:"💾 SAVE",savedMsg:"✓ Saved!",
+  btnClearAll:"🗑 Clear All",
+  normH:"Regular hours",otH:"Overtime",gross:"Gross",ded:"Deduction",taxBase:"Taxable base",
+  taxA:"Tax",insA:"Insurance",netS:"Net salary",totDed:"Total deductions",finalN:"Final salary",
+  convTo:"→ in hours:",dedPh:"Reason (optional)",
+  wkLabel:"Week",wkDedTitle:"➖ Week deductions",wkDedBtn:"＋ Deduct",
+  days:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+  hS:"h",confirmClear:"Clear all data?",confirmWkClear:"Clear this week?",
+  wkHint:"📅 This day → Week",noData:"No data",wkClearBtn:"🗑 Clear Week",
+  cardExport:"Export & Import",
+  exportNote:"📱 To transfer to a new phone: export JSON first, then import it on the new device.",
+  exportSection:"📤 Export",exportJsonSub:"All data",exportXlsSub:"Work hours",
+  importSection:"📥 Import (JSON)",importBtn:"📂 Choose file",
+  importOk:"✓ Data imported successfully!",importErr:"✗ Error! Please check the file.",
+  confirmImport:"Existing data will be replaced. Continue?",
+  cardPin:"PIN Protection",pinEnable:"Enable PIN lock",pinEnableSub:"Ask for PIN on launch",
+  pinCurrentLabel:"Current PIN",btnSetPin:"🔑 Set PIN code",
+  fpEnable:"Fingerprint",fpEnableSub:"If device supports it",
+  pinTitle:"Enter PIN",pinSub:"Use your 4-digit PIN",
+  pinNewTitle:"Set new PIN",pinNewSub:"Enter 4-digit PIN code",
+  pinConfTitle:"Confirm PIN",pinConfSub:"Enter again to confirm",
+  pinWrong:"Wrong PIN! Try again.",pinMismatch:"PINs don't match! Try again.",
+  pinSet:"✓ PIN set successfully",pinLogout:"Sign out",logoutBtn:"Logout"
+}
+};
+
+/* ===== HELPERS ===== */
+function c2h(v){
+  if(!v&&v!==0)return 0;
+  const s=String(v),d=s.indexOf('.');
+  if(d===-1)return parseFloat(v)||0;
+  const h=parseInt(s.slice(0,d))||0;
+  const ms=s.slice(d+1).padEnd(2,'0').slice(0,2);
+  return h+Math.min(59,parseInt(ms)||0)/60;
+}
+function hhmm(h){const w=Math.floor(h),m=Math.round((h-w)*60);return`${w}:${String(m).padStart(2,'0')}`;}
+function ptm(s){const[h,m]=s.split(':').map(Number);return h*60+m;}
+const SYM={TJS:'',RUB:'₽',USD:'$',EUR:'€',GBP:'£',KZT:'₸'};
+function fmtM(v,c){const s=SYM[c]||'';return s?`${s}${v.toFixed(2)}`:`${v.toFixed(2)} ${c}`;}
+function vv(id){return document.getElementById(id).value;}
+function pf(id){return parseFloat(document.getElementById(id).value)||0;}
+function el(id){return document.getElementById(id);}
+function toDS(d){return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function addD(ds,n){const d=new Date(ds+'T12:00:00');d.setDate(d.getDate()+n);return toDS(d);}
+function getSunday(ds){
+  const d=new Date(ds+'T12:00:00');
+  d.setDate(d.getDate()-d.getDay());
+  return toDS(d);
+}
+
+/* ===== STATE ===== */
+let lang='tg', isDark=false, lastH=0, lastDate='', sdC=0;
+let DATA={byWeek:{}};
+const SK='wt_s_v5', DK='wt_d_v5', TK='wt_t_v5';
+
+/* ===== THEME ===== */
+function toggleTheme(){
+  isDark=!isDark;
+  document.body.classList.toggle('dark',isDark);
+  el('themeBtn').textContent=isDark?'🌙':'☀️';
+  localStorage.setItem(TK,isDark?'dark':'light');
+}
+
+/* ===== SETTINGS ===== */
+function loadSett(){
+  const def={defStart:'08:00',defEnd:'17:00',defBreak:'60',otFrom:'48',
+    normRate:'5.00',otRate:'7.50',currency:'TJS',taxPct:'20',insPct:'8',minDed:'241.73'};
+  const s=Object.assign({},def,JSON.parse(localStorage.getItem(SK)||'{}'));
+  ['defStart','defEnd','defBreak','otFrom','normRate','otRate','currency','taxPct','insPct','minDed']
+    .forEach(k=>{const e=el(k);if(e)e.value=s[k]||def[k];});
+  el('startTime').value=s.defStart;
+  el('endTime').value=s.defEnd;
+  el('breakMin').value=s.defBreak;
+}
+function getSett(){
+  return{
+    otFrom:pf('otFrom')||48,normRate:pf('normRate')||5,otRate:pf('otRate')||7.5,
+    cur:vv('currency'),taxPct:pf('taxPct')||20,insPct:pf('insPct')||8,minDed:pf('minDed')||241.73
+  };
+}
+function saveSettings(){
+  const s={defStart:vv('defStart'),defEnd:vv('defEnd'),defBreak:vv('defBreak'),
+    otFrom:vv('otFrom'),normRate:vv('normRate'),otRate:vv('otRate'),currency:vv('currency'),
+    taxPct:vv('taxPct'),insPct:vv('insPct'),minDed:vv('minDed')};
+  localStorage.setItem(SK,JSON.stringify(s));
+  const i=el('savInd');i.classList.add('show');setTimeout(()=>i.classList.remove('show'),2000);
+}
+
+/* ===== DATA ===== */
+function loadData(){DATA=JSON.parse(localStorage.getItem(DK)||'{"byWeek":{}}');}
+function saveData(){localStorage.setItem(DK,JSON.stringify(DATA));}
+function getWk(ds){
+  const wk=getSunday(ds);
+  if(!DATA.byWeek[wk])DATA.byWeek[wk]={days:[],deductions:[]};
+  return DATA.byWeek[wk];
+}
+function sortedWkKeys(){return Object.keys(DATA.byWeek).sort().reverse();} // аз навтарин ба кухна (поён->боло)
+
+/* ===== CALC DAY ===== */
+function calcDay(){
+  const start=ptm(vv('startTime')),end=ptm(vv('endTime'));
+  const brk=parseInt(vv('breakMin'))||0,date=vv('workDate');
+  let w=end-start-brk;if(w<0)w+=1440;
+  const hours=w/60;
+  lastH=hours;lastDate=date;
+  el('dayHours').textContent=hours.toFixed(2);
+  el('dayResult').style.display='block';
+  const s=getSett(),c=TR[lang];
+  el('daySalBox').innerHTML=`
+    <div class="sr"><span class="sl">${hours.toFixed(2)} ${c.hS} × ${s.normRate}</span><span class="sv">${fmtM(hours*s.normRate,s.cur)}</span></div>
+    <div class="sr tot"><span class="sl">${c.gross}</span><span class="sv">${fmtM(hours*s.normRate,s.cur)}</span></div>`;
+  const wk=getSunday(date);
+  const wkeys=sortedWkKeys();
+  let idx=wkeys.indexOf(wk);
+  if(idx===-1)idx=wkeys.length;
+  const sat=addD(wk,6);
+  el('weekHint').textContent=`${c.wkHint} ${idx+1} (${wk} – ${sat})`;
+  el('weekHint').style.display='block';
+}
+
+function addToWeek(){
+  if(!lastDate){alert('Санаро интихоб кунед!');return;}
+  const wk=getWk(lastDate);
+  const idx=wk.days.findIndex(d=>d.date===lastDate);
+  const entry={date:lastDate,hours:lastH,start:vv('startTime'),end:vv('endTime')};
+  if(idx>=0)wk.days[idx]=entry; else wk.days.push(entry);
+  saveData();renderWeeks();showPg('weeks');
+}
+
+/* ===== WEEK SALARY ===== */
+function calcWkSal(wkKey){
+  const s=getSett();
+  const wk=DATA.byWeek[wkKey]||{days:[],deductions:[]};
+  const totalH=wk.days.reduce((a,d)=>a+d.hours,0);
+  const ot=Math.max(0,totalH-s.otFrom),norm=totalH-ot;
+  const gross=norm*s.normRate+ot*s.otRate;
+  const taxable=Math.max(0,gross-s.minDed);
+  const tax=taxable*s.taxPct/100,ins=taxable*s.insPct/100;
+  const net=gross-tax-ins;
+  const totalDed=(wk.deductions||[]).reduce((a,d)=>a+(parseFloat(d.amount)||0),0);
+  return{totalH,ot,norm,gross,taxable,tax,ins,net,totalDed,finalNet:net-totalDed};
+}
+
+/* ===== RENDER WEEKS (тартиб аз боло: навтарин) ===== */
+function renderWeeks(){
+  const c=TR[lang],s=getSett();
+  const wkeys=sortedWkKeys();
+  let allH=0,allD=0,allM=0;
+  wkeys.forEach(k=>{
+    const w=DATA.byWeek[k];
+    allH+=w.days.reduce((a,d)=>a+d.hours,0);
+    allD+=w.days.length;
+    allM+=calcWkSal(k).finalNet;
+  });
+  el('sbH').textContent=allH.toFixed(1);
+  el('sbD').textContent=allD;
+  el('sbM').textContent=fmtM(allM,s.cur);
+  const cont=el('weeksContainer');
+  if(!wkeys.length){
+    cont.innerHTML=`<div class="empty"><div class="emo">📅</div><div>${c.noData}</div></div>`;
+    renderSalWeekSel();return;
+  }
+  cont.innerHTML=wkeys.map((wk,wi)=>{
+    const w=DATA.byWeek[wk];
+    const sat=addD(wk,6);
+    const cs=calcWkSal(wk);
+    const sorted=[...w.days].sort((a,b)=>a.date.localeCompare(b.date));
+    const dayRows=sorted.length?sorted.map(d=>{
+      const dn=c.days[new Date(d.date+'T12:00:00').getDay()];
+      const badge=d.hours>=9?`<span class="badge bo">OT</span>`:d.hours>=8?`<span class="badge bg">OK</span>`:`<span class="badge bm">&lt;8</span>`;
+      return`<div class="drow">
+        <span class="dname">${dn}</span>
+        <span class="ddate">${d.date}</span>
+        <span class="dtimes">${d.start||'--'}–${d.end||'--'} ${badge}</span>
+        <span class="dhours">${d.hours.toFixed(2)}</span>
+        <button class="ddel" onclick="remDay('${wk}','${d.date}')">✕</button>
+      </div>`;
+    }).join(''):`<div class="empty" style="padding:12px 6px"><div class="emo" style="font-size:20px">📋</div><div>${c.noData}</div></div>`;
+    const dedRows=(w.deductions||[]).map((d,di)=>
+      `<div class="ditem">
+        <input type="text" value="${d.label||''}" placeholder="${c.dedPh}" oninput="updDed('${wk}',${di},'label',this.value)" style="flex:1.3;font-size:12px;padding:5px 8px">
+        <input type="number" value="${d.amount||0}" min="0" step="0.01" oninput="updDed('${wk}',${di},'amount',parseFloat(this.value)||0)" style="flex:0.9;font-size:12px;padding:5px 8px">
+        <button class="ddelbtn" onclick="remDed('${wk}',${di})">✕</button>
+      </div>`
+    ).join('');
+    const salHTML=`
+      <div class="sr"><span class="sl">${c.normH}: ${cs.norm.toFixed(2)} × ${s.normRate}</span><span class="sv">${fmtM(cs.norm*s.normRate,s.cur)}</span></div>
+      ${cs.ot>0?`<div class="sr"><span class="sl" style="color:var(--orange)">${c.otH}: ${cs.ot.toFixed(2)} × ${s.otRate}</span><span class="sv" style="color:var(--orange)">${fmtM(cs.ot*s.otRate,s.cur)}</span></div>`:''}
+      <div class="sr"><span class="sl">${c.gross}</span><span class="sv">${fmtM(cs.gross,s.cur)}</span></div>
+      <div class="sr"><span class="sl">— ${c.ded}</span><span class="sv" style="color:var(--muted)">−${fmtM(s.minDed,s.cur)}</span></div>
+      <div class="sr"><span class="sl">— ${c.taxA} (${s.taxPct}%)</span><span class="sv" style="color:var(--red)">−${fmtM(cs.tax,s.cur)}</span></div>
+      <div class="sr"><span class="sl">— ${c.insA} (${s.insPct}%)</span><span class="sv" style="color:var(--red)">−${fmtM(cs.ins,s.cur)}</span></div>
+      <div class="sr tot"><span class="sl">${c.netS}</span><span class="sv">${fmtM(cs.net,s.cur)}</span></div>
+      ${cs.totalDed>0?`<div class="sr" style="background:var(--red-bg)"><span class="sl" style="color:var(--red)">— ${c.totDed}</span><span class="sv" style="color:var(--red)">−${fmtM(cs.totalDed,s.cur)}</span></div>`:''}
+      ${cs.totalDed>0?`<div class="sr fin"><span class="sl">${c.finalN}</span><span class="sv">${fmtM(cs.finalNet,s.cur)}</span></div>`:''}`;
+    const isOpen=wi===0;
+    return`<div class="wacc${isOpen?' open':''}" id="wacc_${wk.replace(/-/g,'_')}">
+      <div class="whdr" onclick="toggleAcc('${wk}')">
+        <div class="whl">
+          <div class="wnum">${c.wkLabel} ${wkeys.length-wi}</div>
+          <div class="wdates">${wk} – ${sat}</div>
+        </div>
+        <div class="whr">
+          <div class="wbh">${cs.totalH.toFixed(1)} ${c.hS}</div>
+          <div class="wbm">${fmtM(cs.finalNet,s.cur)}</div>
+          <div class="warr">▼</div>
+        </div>
+      </div>
+      <div class="wbody">
+        <div class="wbinner">
+          ${dayRows}
+          <div class="stbl" style="margin-top:10px">${salHTML}</div>
+          <div class="wded">
+            <div class="wdedtitle">${c.wkDedTitle}</div>
+            <div id="wded_${wk.replace(/-/g,'_')}">${dedRows}</div>
+            <button class="addbtn" onclick="addWkDed('${wk}')">${c.wkDedBtn} ＋</button>
+          </div>
+          <button class="btn bd" onclick="clearWk('${wk}')" style="margin-top:9px;width:100%">${c.wkClearBtn}</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  renderSalWeekSel();
+}
+
+function toggleAcc(wk){el('wacc_'+wk.replace(/-/g,'_')).classList.toggle('open');}
+function remDay(wk,date){
+  DATA.byWeek[wk].days=DATA.byWeek[wk].days.filter(d=>d.date!==date);
+  if(!DATA.byWeek[wk].days.length&&!(DATA.byWeek[wk].deductions||[]).length)delete DATA.byWeek[wk];
+  saveData();renderWeeks();
+}
+function clearWk(wk){
+  if(confirm(TR[lang].confirmWkClear)){delete DATA.byWeek[wk];saveData();renderWeeks();}
+}
+function clearAll(){
+  if(confirm(TR[lang].confirmClear)){DATA={byWeek:{}};saveData();renderWeeks();}
+}
+function addWkDed(wk){
+  if(!DATA.byWeek[wk])DATA.byWeek[wk]={days:[],deductions:[]};
+  DATA.byWeek[wk].deductions.push({label:'',amount:0});
+  saveData();renderWeeks();
+  el('wacc_'+wk.replace(/-/g,'_')).classList.add('open');
+}
+function remDed(wk,di){
+  DATA.byWeek[wk].deductions.splice(di,1);
+  saveData();renderWeeks();
+  el('wacc_'+wk.replace(/-/g,'_')).classList.add('open');
+}
+function updDed(wk,di,field,val){
+  if(!DATA.byWeek[wk]||!DATA.byWeek[wk].deductions[di])return;
+  DATA.byWeek[wk].deductions[di][field]=val;
+  localStorage.setItem(DK,JSON.stringify(DATA));
+  const cs=calcWkSal(wk),s=getSett();
+  const bh=document.querySelector(`#wacc_${wk.replace(/-/g,'_')} .wbh`);
+  const bm=document.querySelector(`#wacc_${wk.replace(/-/g,'_')} .wbm`);
+  if(bh)bh.textContent=`${cs.totalH.toFixed(1)} ${TR[lang].hS}`;
+  if(bm)bm.textContent=fmtM(cs.finalNet,s.cur);
+}
+
+/* ===== SALARY PAGE ===== */
+function renderSalWeekSel(){
+  const c=TR[lang],s=getSett();
+  const box=el('wkSelBox');if(!box)return;
+  const wkeys=sortedWkKeys();
+  if(!wkeys.length){box.innerHTML=`<div style="font-size:12px;color:var(--muted);padding:4px 0">${c.noData}</div>`;return;}
+  box.innerHTML=wkeys.map((wk,wi)=>{
+    const cs=calcWkSal(wk),sat=addD(wk,6);
+    return`<button class="wk-sel-btn" onclick="loadWkSal('${wk}')">
+      <span>${c.wkLabel} ${wkeys.length-wi}: ${wk} – ${sat}</span>
+      <span class="wkh">${cs.totalH.toFixed(2)} ${c.hS}</span>
+    </button>`;
+  }).join('');
+}
+function loadWkSal(wk){
+  const totalH=(DATA.byWeek[wk]||{days:[]}).days.reduce((a,d)=>a+d.hours,0);
+  el('manHours').value=totalH.toFixed(4).replace(/\.?0+$/,'');
+  showHint();calcSalary();
+}
+function addSalDed(lbl='',val=''){
+  const id=++sdC,c=TR[lang];
+  const row=document.createElement('div');
+  row.className='ditem';row.id='sdi_'+id;
+  row.innerHTML=`<input type="text" placeholder="${c.dedPh}" value="${lbl}" style="flex:1.3;font-size:13px">
+    <input type="number" min="0" step="0.01" value="${val}" placeholder="0.00" style="flex:0.9;font-size:13px" id="sdv_${id}">
+    <button class="ddelbtn" onclick="el('sdi_${id}').remove()">✕</button>`;
+  el('salDeductList').appendChild(row);
+}
+function getSalDeds(){
+  let t=0;document.querySelectorAll('[id^="sdv_"]').forEach(e=>{t+=parseFloat(e.value)||0;});return t;
+}
+function showHint(){
+  const raw=parseFloat(el('manHours').value);
+  const eh=el('convHint');
+  if(isNaN(raw)||raw===0){eh.style.display='none';return;}
+  const rh=c2h(raw);
+  if(Math.abs(rh-raw)>0.001){
+    eh.textContent=`${TR[lang].convTo} ${rh.toFixed(4).replace(/\.?0+$/,'')} (${hhmm(rh)})`;
+    eh.style.display='block';
+  } else eh.style.display='none';
+}
+function calcSalary(){
+  const raw=parseFloat(el('manHours').value)||0;
+  const hours=c2h(raw);
+  const s=getSett(),c=TR[lang];
+  const ot=Math.max(0,hours-s.otFrom),norm=hours-ot;
+  const gross=norm*s.normRate+ot*s.otRate;
+  const taxable=Math.max(0,gross-s.minDed);
+  const tax=taxable*s.taxPct/100,ins=taxable*s.insPct/100;
+  const net=gross-tax-ins;
+  const totalDed=getSalDeds();
+  const finalN=net-totalDed;
+  const convR=Math.abs(hours-raw)>0.001?
+    `<div class="sr" style="background:var(--accent-light)"><span class="sl">${c.convTo} ${hours.toFixed(4).replace(/\.?0+$/,'')} (${hhmm(hours)})</span><span class="sv" style="color:var(--accent)">${raw}→${hours.toFixed(2)}</span></div>`:'';
+  el('salResult').style.display='block';
+  el('salBreak').innerHTML=`
+    ${convR}
+    <div class="sr"><span class="sl">${c.normH}: ${norm.toFixed(2)} ${c.hS} × ${s.normRate}</span><span class="sv">${fmtM(norm*s.normRate,s.cur)}</span></div>
+    ${ot>0?`<div class="sr"><span class="sl" style="color:var(--orange)">${c.otH}: ${ot.toFixed(2)} ${c.hS} × ${s.otRate}</span><span class="sv" style="color:var(--orange)">${fmtM(ot*s.otRate,s.cur)}</span></div>`:''}
+    <div class="sr"><span class="sl">${c.gross}</span><span class="sv">${fmtM(gross,s.cur)}</span></div>
+    <div class="sr"><span class="sl">— ${c.ded} (${s.minDed})</span><span class="sv" style="color:var(--muted)">−${fmtM(s.minDed,s.cur)}</span></div>
+    <div class="sr"><span class="sl">${c.taxBase}</span><span class="sv" style="color:var(--accent)">${fmtM(taxable,s.cur)}</span></div>
+    <div class="sr"><span class="sl">— ${c.taxA} (${s.taxPct}%)</span><span class="sv" style="color:var(--red)">−${fmtM(tax,s.cur)}</span></div>
+    <div class="sr"><span class="sl">— ${c.insA} (${s.insPct}%)</span><span class="sv" style="color:var(--red)">−${fmtM(ins,s.cur)}</span></div>
+    <div class="sr tot"><span class="sl">${c.netS}</span><span class="sv">${fmtM(net,s.cur)}</span></div>
+    ${totalDed>0?`<div class="sr" style="background:var(--red-bg)"><span class="sl" style="color:var(--red)">— ${c.totDed}</span><span class="sv" style="color:var(--red)">−${fmtM(totalDed,s.cur)}</span></div>`:''}
+    <div class="sr fin"><span class="sl">${c.finalN}</span><span class="sv">${fmtM(finalN,s.cur)}</span></div>`;
+}
+
+/* ===== UI ===== */
+function showPg(name){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tabx').forEach(b=>b.classList.remove('active'));
+  el('pg-'+name).classList.add('active');
+  el('tab-'+name).classList.add('active');
+  if(name==='weeks')renderWeeks();
+  if(name==='salary')renderSalWeekSel();
+}
+function toggleLangMenu(){
+  document.getElementById('langDropdown').classList.toggle('open');
+}
+document.addEventListener('click', function(e){
+  const dd=document.getElementById('langDropdown');
+  if(!dd.contains(e.target)) dd.classList.remove('open');
+});
+function setLang(l){
+  lang=l;
+  const btn=document.getElementById('langBtn');
+  if(l==='tg') btn.innerHTML='🌐 ТҶ';
+  else if(l==='ru') btn.innerHTML='🌐 РУ';
+  else btn.innerHTML='🌐 EN';
+  applyLang();renderWeeks();
+}
+function applyLang(){
+  const c=TR[lang];
+  el('appTitle').textContent=c.appTitle;
+  el('tab-calc').textContent=c.tabCalc;
+  el('tab-weeks').textContent=c.tabWeeks;
+  el('tab-salary').textContent=c.tabSalary;
+  el('tab-settings').textContent=c.tabSettings;
+  document.querySelectorAll('[data-k]').forEach(e=>{
+    const k=e.getAttribute('data-k');if(c[k]!==undefined)e.textContent=c[k];
+  });
+  const il=el('importLabel');
+  if(il)il.textContent=c.importBtn;
+}
+
+/* ===== EXPORT / IMPORT / EXCEL ===== */
+function exportJSON(){
+  const payload={
+    version:2,
+    exportedAt:new Date().toISOString(),
+    settings:JSON.parse(localStorage.getItem(SK)||'{}'),
+    data:DATA
+  };
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  const now=new Date();
+  const ds=`${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
+  a.href=url;a.download=`hours_backup_${ds}.json`;a.click();
+  URL.revokeObjectURL(url);
+}
+function importJSON(event){
+  const file=event.target.files[0];
+  if(!file)return;
+  const c=TR[lang];
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const payload=JSON.parse(e.target.result);
+      if(!payload.data||!payload.data.byWeek)throw new Error('Invalid');
+      if(!confirm(c.confirmImport)){event.target.value='';return;}
+      if(payload.settings){
+        localStorage.setItem(SK,JSON.stringify(payload.settings));
+        loadSett();
+      }
+      DATA=payload.data;
+      saveData();
+      renderWeeks();
+      const st=el('importStatus');
+      st.style.display='block';
+      st.style.background='var(--green-bg)';
+      st.style.color='var(--green)';
+      st.style.border='1px solid rgba(26,138,60,.3)';
+      st.textContent=c.importOk;
+      setTimeout(()=>{st.style.display='none';},4000);
+    }catch(err){
+      const st=el('importStatus');
+      st.style.display='block';
+      st.style.background='var(--red-bg)';
+      st.style.color='var(--red)';
+      st.style.border='1px solid rgba(192,57,43,.3)';
+      st.textContent=c.importErr;
+    }
+    event.target.value='';
+  };
+  reader.readAsText(file);
+}
+function exportExcel(){
+  const s=getSett();
+  const wkeys=sortedWkKeys();
+  const c=TR[lang];
+  const rows=[];
+  rows.push([
+    c.wkLabel,'Date','Day','Start','End',
+    'Hours',c.normH+' (h)','OT (h)',
+    c.normH+' pay','OT pay',
+    c.gross,'Deduction','Tax','Insurance',c.netS
+  ]);
+  wkeys.forEach((wk,wi)=>{
+    const w=DATA.byWeek[wk];
+    const sat=addD(wk,6);
+    const cs=calcWkSal(wk);
+    const sorted=[...w.days].sort((a,b)=>a.date.localeCompare(b.date));
+    rows.push([
+      `${c.wkLabel} ${wkeys.length-wi}: ${wk} – ${sat}`,
+      '','','','','','','','','','','','','',''
+    ]);
+    sorted.forEach(d=>{
+      const dn=c.days[new Date(d.date+'T12:00:00').getDay()];
+      const pay=d.hours*s.normRate;
+      rows.push([
+        wkeys.length-wi, d.date, dn, d.start||'', d.end||'',
+        d.hours.toFixed(4),
+        d.hours.toFixed(4),'0',
+        pay.toFixed(2),'0',
+        pay.toFixed(2),'0','0','0',
+        pay.toFixed(2)
+      ]);
+    });
+    rows.push([
+      `ИТОГО Ҳафта ${wkeys.length-wi}`,'','','','',
+      cs.totalH.toFixed(2),
+      cs.norm.toFixed(2),cs.ot.toFixed(2),
+      (cs.norm*s.normRate).toFixed(2),(cs.ot*s.otRate).toFixed(2),
+      cs.gross.toFixed(2),
+      s.minDed.toFixed(2),
+      cs.tax.toFixed(2),
+      cs.ins.toFixed(2),
+      cs.net.toFixed(2)
+    ]);
+    if((w.deductions||[]).length){
+      w.deductions.forEach(d=>{
+        if(d.amount>0){
+          rows.push([`  ➖ ${d.label||'Минус'}`,'','','','','','','','','','','','','',(-(parseFloat(d.amount)||0)).toFixed(2)]);
+        }
+      });
+      rows.push([`  ${c.finalN}`,'','','','','','','','','','','','','',cs.finalNet.toFixed(2)]);
+    }
+    rows.push(['','','','','','','','','','','','','','','']);
+  });
+  let grandH=0,grandM=0;
+  wkeys.forEach(k=>{const cs=calcWkSal(k);grandH+=cs.totalH;grandM+=cs.finalNet;});
+  rows.push([
+    'GRAND TOTAL','','','','',
+    grandH.toFixed(2),'','','','','','','','',
+    grandM.toFixed(2)
+  ]);
+  const csvContent='\uFEFF'+rows.map(r=>
+    r.map(cell=>{
+      const v=String(cell).replace(/"/g,'""');
+      return v.includes(',')||v.includes('\n')||v.includes('"')?`"${v}"`:v;
+    }).join(',')
+  ).join('\r\n');
+  const blob=new Blob([csvContent],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  const now=new Date();
+  const ds=`${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
+  a.href=url;a.download=`work_hours_${ds}.csv`;a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ===== PIN LOCK SYSTEM ===== */
+const PIN_KEY='wt_pin_v1';
+const PIN_SETT_KEY='wt_pinsett_v1';
+let pinBuffer='';
+let pinMode='login';
+let pinNewTemp='';
+let pinIsLocked=true;
+
+function getPinSett(){
+  return Object.assign({enabled:false,hash:'',fp:false},
+    JSON.parse(localStorage.getItem(PIN_SETT_KEY)||'{}'));
+}
+function savePinSett(){
+  const ps=getPinSett();
+  ps.fp=el('fpEnabled')&&el('fpEnabled').checked;
+  localStorage.setItem(PIN_SETT_KEY,JSON.stringify(ps));
+}
+function hashPin(pin){
+  let h=0;
+  for(let i=0;i<pin.length;i++){h=(h*31+pin.charCodeAt(i))>>>0;}
+  return h.toString(36)+'_'+pin.length;
+}
+function showLock(mode){
+  pinMode=mode;pinBuffer='';
+  el('pinScreen').style.display='block';
+  updatePinDots();
+  el('pinError').textContent='';
+  const c=TR[lang];
+  const ps=getPinSett();
+  if(mode==='login'){
+    el('pinTitle').textContent=c.pinTitle;
+    el('pinSub').textContent=c.pinSub;
+    el('pinLogoutTxt').textContent=c.pinLogout;
+    const fpBtn=el('fpBtn');
+    if(ps.fp && window.PublicKeyCredential && typeof window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable === 'function'){
+      window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable().then(avail=>{
+        if(avail) fpBtn.style.display='flex';
+        else fpBtn.style.display='none';
+      }).catch(()=>fpBtn.style.display='none');
+    } else {
+      fpBtn.style.display='none';
+    }
+  } else if(mode==='setup-new'){
+    el('pinTitle').textContent=c.pinNewTitle;
+    el('pinSub').textContent=c.pinNewSub;
+    el('fpBtn').style.display='none';
+  } else if(mode==='setup-confirm'){
+    el('pinTitle').textContent=c.pinConfTitle;
+    el('pinSub').textContent=c.pinConfSub;
+    el('fpBtn').style.display='none';
+  }
+}
+function hideLock(){
+  el('pinScreen').style.display='none';
+  pinIsLocked=false;
+}
+function pinPress(d){
+  if(pinBuffer.length>=4)return;
+  pinBuffer+=d;
+  updatePinDots();
+  el('pinError').textContent='';
+  if(pinBuffer.length===4){
+    setTimeout(()=>pinSubmit(),120);
+  }
+}
+function pinDel(){
+  pinBuffer=pinBuffer.slice(0,-1);
+  updatePinDots();
+}
+function updatePinDots(){
+  for(let i=0;i<4;i++){
+    const d=el('pd'+i);
+    d.classList.toggle('filled',i<pinBuffer.length);
+    d.classList.remove('error');
+  }
+}
+function pinError(msg){
+  el('pinError').textContent=msg;
+  for(let i=0;i<4;i++)el('pd'+i).classList.add('error');
+  setTimeout(()=>{
+    pinBuffer='';
+    updatePinDots();
+    for(let i=0;i<4;i++)el('pd'+i).classList.remove('error');
+  },700);
+}
+function pinSubmit(){
+  const c=TR[lang];
+  const ps=getPinSett();
+  if(pinMode==='login'){
+    if(hashPin(pinBuffer)===ps.hash){
+      hideLock();
+    } else {
+      pinError(c.pinWrong);
+    }
+  } else if(pinMode==='setup-new'){
+    pinNewTemp=pinBuffer;
+    pinBuffer='';
+    showLock('setup-confirm');
+  } else if(pinMode==='setup-confirm'){
+    if(pinBuffer===pinNewTemp){
+      const ps2=getPinSett();
+      ps2.hash=hashPin(pinBuffer);
+      ps2.enabled=true;
+      localStorage.setItem(PIN_SETT_KEY,JSON.stringify(ps2));
+      hideLock();
+      loadPinSettUI();
+      el('pinError').textContent='';
+      const si=el('savInd');si.classList.add('show');
+      si.textContent=c.pinSet;
+      setTimeout(()=>{si.classList.remove('show');si.textContent=c.savedMsg;},2500);
+    } else {
+      pinNewTemp='';
+      pinError(c.pinMismatch);
+      setTimeout(()=>showLock('setup-new'),800);
+    }
+  }
+}
+async function tryFingerprint(){
+  if(!window.PublicKeyCredential) return;
+  try{
+    const avail=await window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+    if(!avail) return;
+    const cred=await navigator.credentials.get({
+      publicKey:{
+        challenge:new Uint8Array(32),
+        timeout:30000,
+        userVerification:'required',
+        rpId:window.location.hostname || 'localhost'
+      }
+    });
+    if(cred) hideLock();
+  } catch(e){}
+}
+function onPinToggle(){
+  const enabled=el('pinEnabled').checked;
+  el('pinSetupArea').style.display=enabled?'block':'none';
+  if(!enabled){
+    const ps=getPinSett();ps.enabled=false;
+    localStorage.setItem(PIN_SETT_KEY,JSON.stringify(ps));
+  }
+}
+function openPinSetup(){
+  pinIsLocked=true;
+  showLock('setup-new');
+}
+function loadPinSettUI(){
+  const ps=getPinSett();
+  if(el('pinEnabled'))el('pinEnabled').checked=ps.enabled;
+  if(el('pinSetupArea'))el('pinSetupArea').style.display=ps.enabled?'block':'none';
+  if(el('fpEnabled'))el('fpEnabled').checked=ps.fp||false;
+  if(el('pinStatusText'))el('pinStatusText').textContent=ps.hash?'****':'—';
+}
+function pinLogout(){
+  showLock('login');
+}
+function userLogout(){
+  const ps=getPinSett();
+  if(ps.enabled && ps.hash){
+    showLock('login');
+  } else {
+    alert(TR[lang].pinLogout || 'Баромад');
+  }
+}
+
+/* ===== INIT ===== */
+window.addEventListener('DOMContentLoaded',()=>{
+  const th=localStorage.getItem(TK);
+  if(th==='dark'){isDark=true;document.body.classList.add('dark');el('themeBtn').textContent='🌙';}
+  const now=new Date();
+  el('workDate').value=toDS(now);
+  loadSett();loadData();applyLang();renderWeeks();
+  loadPinSettUI();
+  const ps=getPinSett();
+  if(ps.enabled&&ps.hash){
+    showLock('login');
+  }
+});
+</script>
+</body>
+</html>
